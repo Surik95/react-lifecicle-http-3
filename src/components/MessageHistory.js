@@ -1,34 +1,24 @@
 import React from "react";
 import Message from "./Message";
 import Response from "./Response";
-import Typing from "./Typing";
+import PropTypes from "prop-types";
 
 export default function MessageHistory({ list }) {
   return (
     <ul>
       {list.map((item) => {
-        return item.type === "response" ? (
-          <Response
-            key={item.id}
-            from={item.from}
-            message={{ text: item.text, time: item.time }}
-          />
-        ) : item.type === "message" ? (
-          <Message
-            key={item.id}
-            from={item.from}
-            message={{ text: item.text, time: item.time }}
-          />
-        ) : item.type === "typing" ? (
-          <Typing
-            key={item.id}
-            from={item.from}
-            message={{ text: item.text, time: item.time }}
-          />
+        return item.userID === localStorage.userID ? (
+          <Response key={item.id} message={item.content} />
+        ) : item.userID === localStorage.guestID ? (
+          <Message key={item.id} message={item.content} />
         ) : null;
       })}
     </ul>
   );
 }
+
+Response.propTypes = {
+  list: PropTypes.array,
+};
 
 MessageHistory.defaultProps = { items: [] };
